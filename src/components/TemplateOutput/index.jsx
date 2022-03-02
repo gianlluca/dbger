@@ -23,27 +23,24 @@ export function TemplateOutput({ props }) {
     }
   };
 
-  const outputLines = getTemplateOutput(props.tables);
-  console.log(outputLines);
-
   return (
-    <Container style={{ minHeight: `${height}px` }}>
+    <Container>
       <div className="resize-area" onPointerDown={handleMouseDown} />
-      <div className="output">
-        <div className="output-lines">
-          {
-            outputLines.map(
-              (line) => <span key={line.id}>{line.id}</span>,
-            )
-          }
-        </div>
-        <div className="output-text">
-          {
-            outputLines.map(
-              (line) => <span className="span-text" key={line.id}>{line.line}</span>,
-            )
-          }
-        </div>
+      <div className="output" style={{ minHeight: `${height}px`, height: `${height}px` }}>
+        <table>
+          <tbody>
+            {
+              getTemplateOutput(props.tables).map(
+                (line) => (
+                  <tr key={line.id}>
+                    <td className="line">{line.id}</td>
+                    <td className="text">{line.line}</td>
+                  </tr>
+                ),
+              )
+            }
+          </tbody>
+        </table>
       </div>
     </Container>
   );
