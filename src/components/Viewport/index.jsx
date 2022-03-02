@@ -32,18 +32,22 @@ function Viewport({ props }) {
 
   const handleKeyDown = (event) => {
     if (!event.repeat) {
-      if (event.which === 13) { // KEY_ENTER
+      // KEY_ENTER
+      if (event.which === 13) {
         document.activeElement.blur();
         document.getSelection().removeAllRanges();
         return;
       }
       if (document.activeElement.id !== 'body') return;
 
-      if (event.which === 65) { // KEY_A
+      // KEY_A
+      if (event.which === 65) {
         props.projectDispatch({ type: 'AddTable' });
         return;
       }
-      if (event.which === 69) { // KEY_E
+
+      // KEY_E
+      if (event.which === 69) {
         props.projectDispatch({ type: 'ToggleControls' });
       }
     }
@@ -84,22 +88,14 @@ function Viewport({ props }) {
         <button
           type="button"
           className="material-icons"
-          onClick={
-            () => {
-              props.projectDispatch({ type: 'AddTable' });
-            }
-          }
+          onClick={() => { props.projectDispatch({ type: 'AddTable' }); }}
         >
           add
         </button>
         <button
           type="button"
           className="material-icons"
-          onClick={
-            () => {
-              props.projectDispatch({ type: 'ToggleControls' });
-            }
-          }
+          onClick={() => { props.projectDispatch({ type: 'ToggleControls' }); }}
         >
           mode_edit
         </button>

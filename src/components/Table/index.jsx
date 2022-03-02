@@ -64,16 +64,14 @@ function Table({
         </div>
         <div className="columns">
           {
-            table.columns.map(
-              (column) => (
-                <Column
-                  key={column.id}
-                  tableId={table.id}
-                  column={column}
-                  projectDispatch={projectDispatch}
-                />
-              ),
-            )
+            table.columns.map((column) => (
+              <Column
+                key={column.id}
+                tableId={table.id}
+                column={column}
+                projectDispatch={projectDispatch}
+              />
+            ))
           }
         </div>
         {
@@ -81,11 +79,9 @@ function Table({
             <button
               type="button"
               className="material-icons"
-              onClick={
-                () => {
-                  projectDispatch({ type: 'AddColumn', id: table.id });
-                }
-              }
+              onClick={() => {
+                projectDispatch({ type: 'AddColumn', id: table.id });
+              }}
             >
               add_circle
             </button>

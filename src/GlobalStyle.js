@@ -45,4 +45,27 @@ export const GlobalStyle = createGlobalStyle`
       user-select: none;            /* Non-prefixed version, currently
                                       supported by Chrome, Edge, Opera and Firefox */
   }
+
+  /* ScrollBar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #3F3F3F;
+    margin: 4px;
+    border-radius: 8px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #5F5F5F;
+    border-radius: 8px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8c8c8c;
+  }
 `;

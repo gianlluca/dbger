@@ -11,8 +11,8 @@ export const Container = styled.div`
       position: absolute;
       display: flex;
       flex-flow: column nowrap;
-      left: 16px;
-      bottom: 24px;
+      left: 12px;
+      bottom: 12px;
       gap: 8px;
 
       button,span{

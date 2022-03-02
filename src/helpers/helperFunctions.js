@@ -22,7 +22,7 @@ export function getTemplateOutput(tables) {
   const outputLines = [];
 
   function appendLine(line) {
-    outputLines.push({ id: outputLines.length, line });
+    outputLines.push({ id: outputLines.length + 1, line });
   }
 
   for (let i = 0; i < tables.length; i += 1) {
