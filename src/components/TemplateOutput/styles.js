@@ -16,7 +16,7 @@ export const Container = styled.div`
     }
 
     .output{
-        padding-top: 12px;
+        padding-top: 16px;
         background-color: #222222;
         overflow: auto;
         
@@ -40,6 +40,7 @@ export const Container = styled.div`
         .text{
             width: 100%;
             color: #666;
+            white-space: pre;
             
             &:hover{
                 background-color: #2c2c2c;

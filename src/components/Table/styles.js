@@ -4,7 +4,39 @@ export const Container = styled.div`
   position: absolute;
 
   div{
-    &.front{
+    &.left{
+      position: absolute;
+      top: 32px;
+      right: 100%; ;
+      display: flex;
+      width: 32px;
+      flex-flow: column nowrap;
+      justify-content: end;
+      align-items: flex-end;
+
+      button{
+        border: none;
+        background: none;
+        line-height: 28px;
+        font-size: 18px;
+        color: #3D3D3D;
+        margin-right: 4px;
+
+        transition: all 0.1s;
+
+        &:hover{
+          filter: brightness(2.0);
+          font-size: 20px;
+        }
+      }
+
+      &>span{
+        white-space: pre;
+        line-height: 28px;
+      }
+    }
+
+    &.center{
       display: flex;
       flex-flow: column nowrap;
       background: linear-gradient(
@@ -52,8 +84,8 @@ export const Container = styled.div`
         }
       }
     }
-
-    &.back{
+    
+    &.right{
       position: absolute;
       top: 32px;
       left: 100%;

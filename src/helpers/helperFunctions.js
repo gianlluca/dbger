@@ -26,19 +26,35 @@ export function getTemplateOutput(tables) {
   }
 
   for (let i = 0; i < tables.length; i += 1) {
-    appendLine(`// ${tables[i].name}`);
+    appendLine(`-- ${tables[i].name}`);
 
-    let createTableLine = `CREATE TABLE IF NOT EXISTS ${tables[i].name.toLowerCase()} ( `;
+    appendLine(`CREATE TABLE IF NOT EXISTS "${tables[i].name.toLowerCase()}" (`);
 
     const { columns } = tables[i];
     for (let j = 0; j < columns.length; j += 1) {
-      createTableLine += `${columns[j].name.toLowerCase()} ${columns[j].type.toUpperCase()}`;
-      createTableLine += columns[j].pk ? ' PRIMARY KEY' : '';
-      createTableLine += j === columns.length - 1 ? ' );' : ', ';
+      let line = `    "${columns[j].name.toLowerCase()}" ${columns[j].type.toLowerCase()}`;
+      line += columns[j].pk ? ' PRIMARY KEY' : ' NOT NULL';
+      line += j === columns.length - 1 ? '' : ',';
+      appendLine(line);
     }
 
-    appendLine(createTableLine);
-    appendLine('');
+    appendLine(');');
+    appendLine('\n');
+  }
+  appendLine('\n');
+
+  for (let i = 0; i < tables.length; i += 1) {
+    const { columns } = tables[i];
+    for (let j = 0; j < columns.length; j += 1) {
+      if (columns[j].relation) {
+        const relSplit = columns[j].relation.name.split('.');
+        if (relSplit.length < 2) {
+          break;
+        }
+        appendLine(`ALTER TABLE "${tables[i].name.toLowerCase()}" ADD FOREIGN KEY ("${columns[j].name.toLowerCase()}") REFERENCES "${relSplit[0].toLowerCase()}" ("${relSplit[1].toLowerCase()}");`);
+        appendLine('\n');
+      }
+    }
   }
 
   return outputLines;

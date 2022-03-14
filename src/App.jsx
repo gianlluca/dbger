@@ -148,6 +148,74 @@ function App() {
             ),
           ],
         };
+      case 'AddColumnRelation':
+        return {
+          ...state,
+          tables: [
+            ...state.tables.map(
+              (table) => (table.id !== action.tableId ? table
+                : {
+                  ...table,
+                  columns: [
+                    ...table.columns.map(
+                      (column) => (column.id !== action.columnId ? column
+                        : {
+                          ...column,
+                          relation: {
+                            id: uuidv4(),
+                            name: `${state.tables[0].name}.${state.tables[0].columns[0].name}`,
+                            inCard: 0,
+                            outCard: 0,
+                          },
+                        }),
+                    ),
+                  ],
+                }
+              ),
+            ),
+          ],
+        };
+      case 'UpdateColumnRelation':
+        return {
+          ...state,
+          tables: [
+            ...state.tables.map(
+              (table) => (table.id !== action.tableId ? table
+                : {
+                  ...table,
+                  columns: [
+                    ...table.columns.map(
+                      (column) => (column.id !== action.columnId ? column
+                        : {
+                          ...column,
+                          relation: action.relation,
+                        }),
+                    ),
+                  ],
+                }
+              ),
+            ),
+          ],
+        };
+      case 'RemoveColumnRelation':
+        return {
+          ...state,
+          tables: [
+            ...state.tables.map(
+              (table) => (table.id !== action.tableId ? table
+                : {
+                  ...table,
+                  columns: [
+                    ...table.columns.map(
+                      (column) => (column.id !== action.columnId ? column
+                        : { ...column, relation: null }),
+                    ),
+                  ],
+                }
+              ),
+            ),
+          ],
+        };
       case 'SetViewOffset':
         return { ...state, viewOffset: action.viewOffset };
       case 'ToggleControls':

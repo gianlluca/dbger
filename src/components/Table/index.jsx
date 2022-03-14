@@ -3,6 +3,7 @@ import { Container } from './styles';
 import Column from '../Column';
 import ColumnControl from '../ColumnControl';
 import { isOnDeleteArea } from '../../helpers/helperFunctions';
+import { Relation } from '../Relation';
 
 function Table({
   controls, viewOffset, table, projectDispatch,
@@ -47,7 +48,46 @@ function Table({
 
   return (
     <Container style={{ transform: `translate(${pos.x - viewOffset.x}px,${pos.y - viewOffset.y}px)` }}>
-      <div className="front">
+      <div className="left">
+        {
+          table.columns.map(
+            (column) => {
+              if (column.relation) {
+                return (
+                  <Relation
+                    key={column.id}
+                    props={{
+                      relation: column.relation,
+                      tableId: table.id,
+                      columnId: column.id,
+                      projectDispatch,
+                      controls,
+                    }}
+                  />
+                );
+              }
+              if (controls) {
+                return (
+                  <button
+                    key={column.id}
+                    type="button"
+                    className="material-icons"
+                    onClick={
+                      () => projectDispatch(
+                        { type: 'AddColumnRelation', tableId: table.id, columnId: column.id },
+                      )
+                    }
+                  >
+                    add_circle
+                  </button>
+                );
+              }
+              return <span> </span>;
+            },
+          )
+        }
+      </div>
+      <div className="center">
         <div className="header" onPointerDown={handleMouseDown}>
           <p
             suppressContentEditableWarning
@@ -79,8 +119,9 @@ function Table({
             <button
               type="button"
               className="material-icons"
-              onClick={() => {
+              onClick={(event) => {
                 projectDispatch({ type: 'AddColumn', id: table.id });
+                event.target.blur();
               }}
             >
               add_circle
@@ -88,7 +129,7 @@ function Table({
           ) : (null)
         }
       </div>
-      <div className="back">
+      <div className="right">
         {
           controls ? table.columns.map(
             (column) => (
