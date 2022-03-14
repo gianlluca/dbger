@@ -17,7 +17,10 @@ function Viewport({ props }) {
   const handleMouseMove = (event) => {
     if (event.which === 2) {
       setViewOffset((previousOffset) => (
-        { x: previousOffset.x - event.movementX, y: previousOffset.y - event.movementY }
+        {
+          x: Math.round(previousOffset.x - event.movementX),
+          y: Math.round(previousOffset.y - event.movementY),
+        }
       ));
     }
   };

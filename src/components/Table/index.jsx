@@ -27,7 +27,10 @@ function Table({
   const handleMouseMove = (event) => {
     setPos(
       (previousPos) => (
-        { x: previousPos.x + event.movementX, y: previousPos.y + event.movementY }
+        {
+          x: Math.round(previousPos.x + event.movementX),
+          y: Math.round(previousPos.y + event.movementY),
+        }
       ),
     );
   };
