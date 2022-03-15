@@ -21,6 +21,7 @@ export function newProjectObject() {
     ],
     controls: true,
     viewOffset: { x: 0, y: 0 },
+    templateConf: { height: 40, visible: false },
   };
 }
 
@@ -30,7 +31,15 @@ export function loadProjectName(projectId) {
 }
 
 export function loadProjectData(projectId) {
-  return JSON.parse(localStorage.getItem(projectId));
+  const project = JSON.parse(localStorage.getItem(projectId));
+
+  // To avoid error loading projects that was saved before
+  // the template conf functionality
+  if (!project.templateConf) {
+    return { ...project, templateConf: { height: 44, visible: true } };
+  }
+
+  return project;
 }
 
 export function saveProject(project) {
@@ -45,7 +54,7 @@ export function deleteProjectData(projectId) {
 export function loadLastProject() {
   const lastProjectId = localStorage.getItem('last_project_id');
   if (lastProjectId) {
-    return JSON.parse(localStorage.getItem(lastProjectId));
+    return loadProjectData(lastProjectId);
   }
   return newProjectObject();
 }

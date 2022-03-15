@@ -45,6 +45,10 @@ function Viewport({ props }) {
 
       // KEY_A
       if (event.which === 65) {
+        if (event.ctrlKey) {
+          event.preventDefault();
+          return;
+        }
         props.projectDispatch({ type: 'AddTable' });
         return;
       }
@@ -91,14 +95,24 @@ function Viewport({ props }) {
         <button
           type="button"
           className="material-icons"
-          onClick={() => { props.projectDispatch({ type: 'AddTable' }); }}
+          onClick={
+            (event) => {
+              props.projectDispatch({ type: 'AddTable' });
+              event.target.blur();
+            }
+          }
         >
           add
         </button>
         <button
           type="button"
           className="material-icons"
-          onClick={() => { props.projectDispatch({ type: 'ToggleControls' }); }}
+          onClick={
+            (event) => {
+              props.projectDispatch({ type: 'ToggleControls' });
+              event.target.blur();
+            }
+          }
         >
           mode_edit
         </button>

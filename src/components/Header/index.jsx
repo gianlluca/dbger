@@ -5,7 +5,13 @@ export function Header({ props }) {
   return (
     <Container>
       <div>
-        <button type="button" className="material-icons home-button">home</button>
+        <button
+          type="button"
+          className="material-icons home-button"
+          onClick={(event) => { event.target.blur(); }}
+        >
+          home
+        </button>
       </div>
       <div className="div-project">
         <span

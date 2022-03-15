@@ -85,7 +85,7 @@ function Table({
                   </button>
                 );
               }
-              return <span> </span>;
+              return <span key={column.id}> </span>;
             },
           )
         }

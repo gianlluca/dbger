@@ -227,6 +227,11 @@ function App() {
         };
       case 'SetProject':
         return action.project;
+      case 'UpdateTemplateConfig':
+        return {
+          ...state,
+          templateConf: action.templateConf,
+        };
       default:
         throw new Error('Action type unrecognizable');
     }
@@ -286,7 +291,7 @@ function App() {
         }}
       />
       <Viewport props={{ project, projectDispatch }} />
-      <TemplateOutput props={{ tables: project.tables }} />
+      <TemplateOutput props={{ project, projectDispatch }} />
       <GlobalStyle />
     </>
   );

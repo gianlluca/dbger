@@ -2,6 +2,31 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
     z-index: 1;
+    position: relative;
+    background-color: #222222;
+
+
+    &>button{
+        position: absolute;
+        left: 12px;
+        bottom: 100%;
+        height: fit-content;
+        width: fit-content;
+        border: 0;
+        background: #00000044;
+        border-radius: 2px;
+        color: #444;
+        padding: 0 8px;
+        font-size: 24px;
+        line-height: 16px;
+
+        transition: all 0.2s;
+
+        &:hover{
+          background: #00000088;
+          color: #888;
+        }
+    }
 
     .resize-area{
         min-height: 4px;
@@ -17,8 +42,8 @@ export const Container = styled.div`
 
     .output{
         padding-top: 16px;
-        background-color: #222222;
         overflow: auto;
+
         
         table{
             display: inline-block;

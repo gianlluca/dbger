@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  min-height: 40%;
-  flex: 1 0;
+  min-height: 192px;
+  flex: 1 1;
   width: 100%;
   position: relative;
 
@@ -12,7 +12,7 @@ export const Container = styled.div`
       display: flex;
       flex-flow: column nowrap;
       left: 12px;
-      bottom: 12px;
+      bottom: 32px;
       gap: 8px;
 
       button,span{
