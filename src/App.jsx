@@ -23,7 +23,7 @@ function App() {
             ...state.tables,
             {
               id: uuidv4(),
-              name: 'Table',
+              name: 'table',
               columns: [
                 {
                   id: uuidv4(), name: 'id', type: 'int', pk: true,
@@ -247,6 +247,8 @@ function App() {
 
   const loadProject = (projectId) => {
     const loadedProject = loadProjectData(projectId);
+    saveProject(loadedProject);
+
     projectDispatch({ type: 'SetProject', project: loadedProject });
   };
 

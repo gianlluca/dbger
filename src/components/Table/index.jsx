@@ -54,39 +54,18 @@ function Table({
       <div className="left">
         {
           table.columns.map(
-            (column) => {
-              if (column.relation) {
-                return (
-                  <Relation
-                    key={column.id}
-                    props={{
-                      relation: column.relation,
-                      tableId: table.id,
-                      columnId: column.id,
-                      projectDispatch,
-                      controls,
-                    }}
-                  />
-                );
-              }
-              if (controls) {
-                return (
-                  <button
-                    key={column.id}
-                    type="button"
-                    className="material-icons"
-                    onClick={
-                      () => projectDispatch(
-                        { type: 'AddColumnRelation', tableId: table.id, columnId: column.id },
-                      )
-                    }
-                  >
-                    add_circle
-                  </button>
-                );
-              }
-              return <span key={column.id}> </span>;
-            },
+            (column) => (
+              <Relation
+                key={column.id}
+                props={{
+                  relation: column.relation,
+                  tableId: table.id,
+                  columnId: column.id,
+                  projectDispatch,
+                  controls,
+                }}
+              />
+            ),
           )
         }
       </div>
@@ -96,11 +75,13 @@ function Table({
             suppressContentEditableWarning
             contentEditable="true"
             spellCheck="false"
-            onBlur={(event) => {
-              projectDispatch(
-                { type: 'UpdateTableName', id: table.id, name: event.target.innerHTML },
-              );
-            }}
+            onBlur={
+              (event) => {
+                projectDispatch(
+                  { type: 'UpdateTableName', id: table.id, name: event.target.innerHTML },
+                );
+              }
+            }
           >
             {table.name}
           </p>
@@ -121,11 +102,13 @@ function Table({
           controls ? (
             <button
               type="button"
-              className="material-icons"
-              onClick={(event) => {
-                projectDispatch({ type: 'AddColumn', id: table.id });
-                event.target.blur();
-              }}
+              className="material-icons add-column-button"
+              onClick={
+                (event) => {
+                  projectDispatch({ type: 'AddColumn', id: table.id });
+                  event.target.blur();
+                }
+              }
             >
               add_circle
             </button>

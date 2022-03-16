@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
-  background-color: #2f2f2f;
-  border-radius: 0 4px 4px 0;
-  height: 24px;
-  margin: 4px 0;
-  padding: 0 2px 0 6px;
-  gap: 2px;
   align-items: center;
+  background-color: #2f2f2f;
+  border-radius: 0 0.25rem 0.25rem 0;
+  height: 1.5rem;
+  margin: 0.25rem 0;
+  padding: 0 0.125rem 0 0.25rem;
   box-shadow: 0 1px 3px #0000005f;
+  gap: 0.125rem;
 
   transition: all 0.2s;
 
@@ -18,11 +18,16 @@ export const Container = styled.div`
   }
 
   button{
-    border: 0;
-    border-radius: 50%;
-    background: transparent;
-    width: 22px;
-    height: 22px;
+    border: none;
+    background: none;
+    border-radius: 25%;
+    line-height: 1.375rem;
+    width: 1.25rem;
+    font-size: 1.125rem;
+    color: #4A4A4A;
+    text-align: center;
+    letter-spacing: -1px;
+
 
     transition: all 0.2s;
 
@@ -32,12 +37,9 @@ export const Container = styled.div`
     }
 
     &.key{
-      font-size: 20px;
       color: #979767;
     }
-
     &.delete{
-      font-size: 18px;
       color: #976767;
     }
   }

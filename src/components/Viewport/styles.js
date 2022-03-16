@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  min-height: 192px;
-  flex: 1 1;
+  min-height: 10rem;
+  flex: 1 0;
   width: 100%;
   position: relative;
 
@@ -11,9 +11,9 @@ export const Container = styled.div`
       position: absolute;
       display: flex;
       flex-flow: column nowrap;
-      left: 12px;
-      bottom: 32px;
-      gap: 8px;
+      left: 0.75rem;
+      bottom: 2rem;
+      gap: 0.5rem;
 
       button,span{
         height: fit-content;
@@ -22,16 +22,20 @@ export const Container = styled.div`
         background: #00000044;
         border-radius: 50%;
         color: #444;
-        padding: 8px;
-        font-size: 24px;
+        padding: 0.5rem;
+        font-size: 1.5rem;
 
         transition: all 0.2s;
 
+        &.visibility{
+          font-size: 1.25rem;
+          padding: 0.625rem;
+        }
+
         &:hover{
           background: #00000088;
-          border-radius: 50%;
           color: #888;
-          font-size: 30px;
+          font-size: 1.875rem;
         }
 
         &#delete-area{

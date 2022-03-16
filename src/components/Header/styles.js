@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  min-height: 44px;
+  min-height: 2.75rem;
   width: 100%;
   background-color: #242424;
   box-shadow: 0 1px 4px 1px #00000022;
@@ -16,22 +16,23 @@ export const Container = styled.div`
 
   .div-project{
     justify-content: center;
-    gap: 4px;
+    gap: 0.25rem;
 
     > span{
       background-color: #2B2B2B;
-      height: 28px;
+      font-size: 1.375rem;
+      height: 1.75rem;
       display: flex;
       align-items: center;
       vertical-align: middle;
-      border-radius: 4px;
+      border-radius: 0.25rem;
     }
 
     .project-name{
-      font-size: 14px;
+      font-size: 0.875rem;
       font-weight: 600;
-      padding: 0 16px;
-      min-width: 24px;
+      padding: 0 1rem;
+      min-width: 1.5rem;
 
       transition: all 0.2s;
 
@@ -43,7 +44,7 @@ export const Container = styled.div`
     .list-projects-area{
       position: relative;
       justify-content: center;
-      width: 28px;
+      width: 1.75rem;
 
       .list-projects-content{
         position: absolute;
@@ -52,7 +53,7 @@ export const Container = styled.div`
         display: none;
         flex-flow: column nowrap;
         background-color: #2B2B2B;
-        border-radius: 2px 8px 8px 8px;
+        border-radius: 0.25rem;
         box-shadow: 0 1px 2px #00000022;
       }
         
@@ -69,12 +70,12 @@ export const Container = styled.div`
   }
 
   .home-button{
-    margin-left: 8px;
+    margin-left: 0.5rem;
     border: 0;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     background-color: #2B2B2B;
-    font-size: 22px;
-    padding: 4px;
+    font-size: 1.375rem;
+    padding: 0.25rem;
     color: #A2A2A2;
   }
 `;

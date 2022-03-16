@@ -8,17 +8,17 @@ export const Container = styled.div`
 
     &>button{
         position: absolute;
-        left: 12px;
+        left: 0.75rem;
         bottom: 100%;
         height: fit-content;
         width: fit-content;
         border: 0;
         background: #00000044;
-        border-radius: 2px;
+        border-radius: 0.125rem;
         color: #444;
-        padding: 0 8px;
-        font-size: 24px;
-        line-height: 16px;
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        line-height: 1rem;
 
         transition: all 0.2s;
 
@@ -41,19 +41,19 @@ export const Container = styled.div`
     }
 
     .output{
-        padding-top: 16px;
+        padding-top: 1rem;
         overflow: auto;
 
         
         table{
             display: inline-block;
-            border-spacing: 16px 0;
+            border-spacing: 1rem 0;
             width: 100%;
         }
 
         td{
-            font-size: 14px;
-            line-height: 18px;
+            font-size: 0.875rem;
+            line-height: 1.125rem;
             color: #444;
         }
 

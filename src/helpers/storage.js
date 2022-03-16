@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { getAddTablePosition } from './helperFunctions';
 
 export function newProjectObject() {
   return {
@@ -16,7 +17,7 @@ export function newProjectObject() {
             id: uuidv4(), name: 'name', type: 'varchar', pk: false,
           },
         ],
-        pos: { x: (window.innerWidth / 2.0 - 78), y: (window.innerHeight / 2.0 - 67) },
+        pos: getAddTablePosition({ x: 0, y: 0 }),
       },
     ],
     controls: true,

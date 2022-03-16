@@ -8,7 +8,7 @@ function ColumnControl({
     <Container>
       <button
         type="button"
-        className="material-icons key"
+        className={`material-icons ${columnPk ? 'key' : ''}`}
         onClick={() => { projectDispatch({ type: 'ToggleColumnPk', tableId, columnId }); }}
       >
         {columnPk ? 'key' : 'key_off'}
