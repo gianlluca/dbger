@@ -106,7 +106,7 @@ function Viewport({ props }) {
         </button>
         <button
           type="button"
-          className="material-icons"
+          className="material-icons visibility"
           onClick={
             (event) => {
               props.projectDispatch({ type: 'ToggleControls' });
@@ -114,7 +114,7 @@ function Viewport({ props }) {
             }
           }
         >
-          mode_edit
+          {props.project.controls ? 'visibility' : 'visibility_off'}
         </button>
         <span id="delete-area" type="button" className="material-icons">delete_outline</span>
       </div>
