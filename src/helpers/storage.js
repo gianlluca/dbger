@@ -8,7 +8,7 @@ export function newProjectObject() {
     tables: [
       {
         id: uuidv4(),
-        name: 'User',
+        name: 'users',
         columns: [
           {
             id: uuidv4(), name: 'id', type: 'int', pk: true,
@@ -22,7 +22,7 @@ export function newProjectObject() {
     ],
     controls: true,
     viewOffset: { x: 0, y: 0 },
-    templateConf: { height: 40, visible: false },
+    sqlOutputConf: { height: 40, visible: false },
   };
 }
 
@@ -36,8 +36,8 @@ export function loadProjectData(projectId) {
 
   // To avoid error loading projects that was saved before
   // the template conf functionality
-  if (!project.templateConf) {
-    return { ...project, templateConf: { height: 44, visible: true } };
+  if (!project.sqlOutputConf) {
+    return { ...project, sqlOutputConf: { height: 44, visible: true } };
   }
 
   return project;

@@ -2,6 +2,11 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
+  z-index: 0;
+
+  &:active, &:focus-within{
+    z-index: 1;
+  }
 
   .container-left {
     position: absolute;
@@ -21,7 +26,7 @@ export const Container = styled.div`
       rgb(47, 47, 47) 2rem,
       rgb(47, 47, 47) 100%
     );
-    box-shadow: 1px 1px 2px #00000088;
+  box-shadow: 1px 1px 3px 1px #00000044;
     border-radius: 0.5rem;
 
     .header {
@@ -32,7 +37,11 @@ export const Container = styled.div`
       color: #c8c8c8;
       font-weight: 700;
       text-shadow: 1px 1px 3px #00000045;
-      cursor: pointer;
+      cursor: grab;
+
+      &:active{
+        cursor: grabbing;
+      }
 
       p {
         cursor: text;

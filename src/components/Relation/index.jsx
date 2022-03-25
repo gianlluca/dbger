@@ -7,6 +7,8 @@ export function Relation({ props }) {
     relation, columnId, tableId, controls, projectDispatch,
   } = props;
 
+  const handleAddRelation = () => { projectDispatch({ type: 'AddColumnRelation', tableId, columnId }); };
+  const handleRemoveRelation = () => { projectDispatch({ type: 'RemoveColumnRelation', tableId, columnId }); };
   const handleChangeRelationName = (event) => {
     projectDispatch(
       {
@@ -25,9 +27,7 @@ export function Relation({ props }) {
         type: 'UpdateColumnRelation',
         tableId,
         columnId,
-        relation: {
-          ...relation, in: !relation.in,
-        },
+        relation: { ...relation, in: !relation.in },
       },
     );
   };
@@ -37,9 +37,7 @@ export function Relation({ props }) {
         type: 'UpdateColumnRelation',
         tableId,
         columnId,
-        relation: {
-          ...relation, out: !relation.out,
-        },
+        relation: { ...relation, out: !relation.out },
       },
     );
   };
@@ -54,11 +52,7 @@ export function Relation({ props }) {
             <button
               type="button"
               className="material-icons delete"
-              onClick={
-                () => projectDispatch(
-                  { type: 'RemoveColumnRelation', tableId, columnId },
-                )
-              }
+              onClick={handleRemoveRelation}
             >
               clear
             </button>
@@ -69,11 +63,7 @@ export function Relation({ props }) {
                 key={columnId}
                 type="button"
                 className="material-icons"
-                onClick={
-                  () => projectDispatch(
-                    { type: 'AddColumnRelation', tableId, columnId },
-                  )
-                }
+                onClick={handleAddRelation}
               >
                 add_circle
               </button>
@@ -81,7 +71,7 @@ export function Relation({ props }) {
         ) : (null)
       }
       {
-        // If column has a relation return a the relation right after the button to remove it
+        // If column has a relation return the relation right after the button to remove it
         relation ? (
           <>
             <div className="rel-column">
@@ -101,6 +91,7 @@ export function Relation({ props }) {
               src={relation.out ? (spread) : (line)}
               alt={relation.out ? 'spread' : 'line'}
               style={{ transform: 'scaleX(-1)', cursor: 'pointer' }}
+              draggable="false"
             />
             <img src={line} alt="line" />
             <img
@@ -110,6 +101,7 @@ export function Relation({ props }) {
               src={relation.in ? (spread) : (line)}
               alt={relation.out ? 'spread' : 'line'}
               style={{ cursor: 'pointer' }}
+              draggable="false"
             />
           </>
         ) : (null)

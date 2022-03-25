@@ -12,8 +12,8 @@ export const Container = styled.tr`
     background-color: #00000044;
 
     .column-properties{
+      transition: all 0.25s;
       transform: scaleY(1);
-      transition: all 0.2s ease;
     }
   }
 
@@ -22,6 +22,7 @@ export const Container = styled.tr`
     min-width: 1rem;
     font-weight: ${(props) => (props.pk === 'true' ? 700 : 400)};
     color: #a6a6a6;
+    cursor: text;
 
     &.name{
       text-align: left;

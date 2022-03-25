@@ -5,6 +5,7 @@ export const Container = styled.div`
   flex: 1 0;
   width: 100%;
   position: relative;
+  overflow: hidden;
 
   div{
     &.ui-controls{
@@ -14,6 +15,7 @@ export const Container = styled.div`
       left: 0.75rem;
       bottom: 2rem;
       gap: 0.5rem;
+      z-index: 2;
 
       button,span{
         height: fit-content;
@@ -38,7 +40,7 @@ export const Container = styled.div`
           font-size: 1.875rem;
         }
 
-        &#delete-area{
+        &.delete-area{
           color: #5F4040;
         }
       }

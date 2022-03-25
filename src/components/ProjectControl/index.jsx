@@ -4,28 +4,34 @@ import { loadProjectName } from '../../helpers/storage';
 import { Container } from './styles';
 
 export function ProjectControl({ props, remove }) {
+  const handleLoadCreateProject = () => {
+    if (props.projectId === 0) {
+      props.createProject();
+    } else {
+      props.loadProject(props.projectId);
+    }
+  };
+  const handleDeleteProject = () => { props.deleteProject(props.projectId); };
+
   return (
     <Container>
-      <span
-        onClick={
+      <span onClick={handleLoadCreateProject}>
+        {
           props.projectId !== 0
-            ? () => { props.loadProject(props.projectId); }
-            : () => { props.createProject(); }
+            ? loadProjectName(props.projectId)
+            : 'New Project'
         }
-      >
-        {props.projectId !== 0 ? loadProjectName(props.projectId) : 'New Project'}
       </span>
       {
-        remove
-          ? (
-            <button
-              type="button"
-              className="material-icons"
-              onClick={() => { props.deleteProject(props.projectId); }}
-            >
-              clear
-            </button>
-          )
+        remove ? (
+          <button
+            type="button"
+            className="material-icons"
+            onClick={handleDeleteProject}
+          >
+            clear
+          </button>
+        )
           : (null)
       }
     </Container>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  z-index: 1;
+  z-index: 2;
   background-color: #222222;
   position: relative;
 
@@ -20,10 +20,8 @@ export const Container = styled.div`
 
       transition: all 0.3s;
 
-      &:hover{
-          background-color: #323232;
-      }
-      &:active{
+      &:active, &:focus-within, &:hover{
+          cursor: ns-resize;
           background-color: #323232;
       }
   }
@@ -44,7 +42,7 @@ export const Container = styled.div`
             border: 0;
             border-radius: 0.25rem;
             background-color: #2C2C2C;
-            padding: 0.125rem 0.25rem;
+            padding: 0.125rem 0.4375rem;
             color: #aaa;
 
             transition: all 0.2s;

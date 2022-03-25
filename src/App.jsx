@@ -1,6 +1,8 @@
-import { useEffect, useReducer, useState } from 'react';
+import {
+  useEffect, useReducer, useState, useRef,
+} from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { getAddTablePosition } from './helpers/helperFunctions';
+import { getAddTablePosition, shiftColumn } from './helpers/helperFunctions';
 import {
   deleteProjectData, loadLastProject, loadProjectData, loadProjectList,
   newProjectObject, saveProject, saveProjectList,
@@ -11,6 +13,9 @@ import { GlobalStyle } from './GlobalStyle';
 import { SqlOutput } from './components/SqlOutput';
 
 function App() {
+  const viewportRef = useRef(null);
+  const deleteAreaRef = useRef(null);
+
   const [projectList, setProjectList] = useState(loadProjectList());
   const [project, projectDispatch] = useReducer(projectReducer, loadLastProject());
 
@@ -24,30 +29,22 @@ function App() {
             {
               id: uuidv4(),
               name: 'table',
-              columns: [
-                {
-                  id: uuidv4(), name: 'id', type: 'int', pk: true,
-                },
-              ],
-              pos: getAddTablePosition(state.viewOffset),
+              columns: [{
+                id: uuidv4(), name: 'id', type: 'int', pk: true,
+              }],
+              pos: getAddTablePosition(viewportRef, state.viewOffset),
             },
           ],
         };
       case 'UpdateTable':
         return {
           ...state,
-          tables: [
-            ...state.tables.map(
-              (table) => (table.id !== action.table.id ? table : action.table),
-            ),
-          ],
+          tables: [...state.tables.map((table) => (table.id !== action.table.id ? table : action.table))],
         };
       case 'RemoveTable':
         return {
           ...state,
-          tables: [
-            ...state.tables.filter((table) => table.id !== action.id),
-          ],
+          tables: [...state.tables.filter((table) => table.id !== action.id)],
         };
       case 'AddColumn':
         return {
@@ -57,10 +54,26 @@ function App() {
               (table) => (table.id !== action.id ? table
                 : {
                   ...table,
-                  columns: [...table.columns, {
-                    id: uuidv4(), name: 'name', type: 'varchar', pk: false, notNull: true,
-                  }],
+                  columns: [
+                    ...table.columns, {
+                      id: uuidv4(), name: 'name', type: 'varchar', pk: false, notNull: true,
+                    },
+                  ],
                 }),
+            ),
+          ],
+        };
+      case 'MoveColumn':
+        return {
+          ...state,
+          tables: [
+            ...state.tables.map(
+              (table) => (table.id !== action.tableId ? table
+                : {
+                  ...table,
+                  columns: shiftColumn([...table.columns], action.columnId, action.shift),
+                }
+              ),
             ),
           ],
         };
@@ -73,9 +86,7 @@ function App() {
                 : {
                   ...table,
                   columns: [
-                    ...table.columns.map(
-                      (column) => (column.id !== action.column.id ? column : action.column),
-                    ),
+                    ...table.columns.map((column) => (column.id !== action.column.id ? column : action.column)),
                   ],
                 }
               ),
@@ -90,9 +101,7 @@ function App() {
               (table) => (table.id !== action.tableId ? table
                 : {
                   ...table,
-                  columns: [
-                    ...table.columns.filter((column) => column.id !== action.columnId),
-                  ],
+                  columns: [...table.columns.filter((column) => column.id !== action.columnId)],
                 }
               ),
             ),
@@ -135,11 +144,7 @@ function App() {
                   ...table,
                   columns: [
                     ...table.columns.map(
-                      (column) => (column.id !== action.columnId ? column
-                        : {
-                          ...column,
-                          relation: action.relation,
-                        }),
+                      (column) => (column.id !== action.columnId ? column : { ...column, relation: action.relation }),
                     ),
                   ],
                 }
@@ -157,8 +162,7 @@ function App() {
                   ...table,
                   columns: [
                     ...table.columns.map(
-                      (column) => (column.id !== action.columnId ? column
-                        : { ...column, relation: null }),
+                      (column) => (column.id !== action.columnId ? column : { ...column, relation: null }),
                     ),
                   ],
                 }
@@ -177,10 +181,15 @@ function App() {
         };
       case 'SetProject':
         return action.project;
+      case 'ToggleSqlOutput':
+        return {
+          ...state,
+          sqlOutputConf: { ...state.sqlOutputConf, visible: !state.sqlOutputConf.visible },
+        };
       case 'UpdateTemplateConfig':
         return {
           ...state,
-          templateConf: action.templateConf,
+          sqlOutputConf: action.sqlOutputConf,
         };
       default:
         throw new Error('Action type unrecognizable');
@@ -189,16 +198,16 @@ function App() {
 
   const createProject = () => {
     const newProject = newProjectObject();
-    saveProject(newProject);
 
+    saveProject(newProject);
     setProjectList((previousList) => [...previousList, newProject.id]);
     projectDispatch({ type: 'SetProject', project: newProject });
   };
 
   const loadProject = (projectId) => {
     const loadedProject = loadProjectData(projectId);
-    saveProject(loadedProject);
 
+    saveProject(loadedProject);
     projectDispatch({ type: 'SetProject', project: loadedProject });
   };
 
@@ -219,6 +228,7 @@ function App() {
 
   useEffect(() => {
     saveProject(project);
+
     if (!projectList.includes(project.id)) {
       setProjectList((previousList) => [...previousList, project.id]);
     } else {
@@ -226,9 +236,7 @@ function App() {
     }
   }, [project]);
 
-  useEffect(() => {
-    saveProjectList(projectList);
-  }, [projectList]);
+  useEffect(() => { saveProjectList(projectList); }, [projectList]);
 
   return (
     <>
@@ -242,11 +250,9 @@ function App() {
           deleteProject,
         }}
       />
-      <Viewport props={{ project, projectDispatch }} />
+      <Viewport viewportRef={viewportRef} deleteAreaRef={deleteAreaRef} props={{ project, projectDispatch }} />
       {
-        project.templateConf.visible ? (
-          <SqlOutput props={{ project, projectDispatch }} />
-        ) : (null)
+        project.sqlOutputConf.visible ? (<SqlOutput props={{ project, projectDispatch }} />) : (null)
       }
       <GlobalStyle />
     </>

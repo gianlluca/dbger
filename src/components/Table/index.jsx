@@ -5,17 +5,22 @@ import { isOnDeleteArea } from '../../helpers/helperFunctions';
 import { Relation } from '../Relation';
 
 function Table({
-  controls, viewOffset, table, projectDispatch,
+  controls, viewOffset, table, projectDispatch, deleteAreaRef,
 }) {
   const [pos, setPos] = useState(table.pos);
   const [dragging, setDragging] = useState(false);
 
-  const updateTableName = (newName) => {
-    projectDispatch({ type: 'UpdateTable', table: { ...table, name: newName } });
+  const handleChangeName = (event) => {
+    projectDispatch({ type: 'UpdateTable', table: { ...table, name: event.target.textContent } });
   };
 
-  const updateTablePos = () => {
+  const handleChangePos = () => {
     projectDispatch({ type: 'UpdateTable', table: { ...table, pos } });
+  };
+
+  const handleAddColumn = (event) => {
+    projectDispatch({ type: 'AddColumn', id: table.id });
+    event.target.blur();
   };
 
   const handleMouseUp = (event) => {
@@ -25,7 +30,7 @@ function Table({
 
       setDragging(false);
 
-      if (isOnDeleteArea(event, 'delete-area')) {
+      if (isOnDeleteArea(event, deleteAreaRef)) {
         projectDispatch({ type: 'RemoveTable', id: table.id });
       }
     }
@@ -49,7 +54,7 @@ function Table({
   };
 
   useEffect(() => {
-    if (!dragging) { updateTablePos(); }
+    if (!dragging) { handleChangePos(); }
   }, [dragging]);
 
   return (
@@ -78,7 +83,7 @@ function Table({
             suppressContentEditableWarning
             contentEditable="true"
             spellCheck="false"
-            onBlur={(event) => { updateTableName(event.target.innerHTML); }}
+            onBlur={handleChangeName}
           >
             {table.name}
           </p>
@@ -110,12 +115,7 @@ function Table({
             <button
               type="button"
               className="material-icons add-column-button"
-              onClick={
-                (event) => {
-                  projectDispatch({ type: 'AddColumn', id: table.id });
-                  event.target.blur();
-                }
-              }
+              onClick={handleAddColumn}
             >
               add_circle
             </button>

@@ -2,48 +2,27 @@ import React, { useState } from 'react';
 import { Container } from './styles';
 
 function ColumnProperties({ tableId, column, projectDispatch }) {
-  const [defaultValue, setDefaultValue] = useState(column.defaultValue || '');
+  const [defaultValue, setDefaultValue] = useState(column.default || '');
   const [check, setCheck] = useState(column.check || '');
   const [comment, setComment] = useState(column.comment || '');
 
-  const toggleColumnPk = () => {
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, pk: !column.pk },
-    });
+  const handleTogglePk = () => {
+    projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, pk: !column.pk } });
   };
-  const toggleColumnNotNull = () => {
-    if (column.pk) { return; }
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, notNull: !column.notNull },
-    });
+  const handleToggleNotNull = () => {
+    if (!column.pk) {
+      projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, notNull: !column.notNull } });
+    }
   };
-  const toggleColumnIndexed = () => {
-    if (column.pk) { return; }
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, indexed: !column.indexed },
-    });
+  const handleToggleIndexed = () => {
+    if (!column.pk) {
+      projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, indexed: !column.indexed } });
+    }
   };
-  const toggleColumnUnique = () => {
-    if (column.pk) { return; }
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, unique: !column.unique },
-    });
-  };
-
-  const updateColumnDefault = (event) => {
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, default: event.target.value },
-    });
-  };
-  const updateColumnCheck = (event) => {
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, check: event.target.value },
-    });
-  };
-  const updateColumnComment = (event) => {
-    projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, comment: event.target.value },
-    });
+  const handleToggleUnique = () => {
+    if (!column.pk) {
+      projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, unique: !column.unique } });
+    }
   };
 
   const handleChangeColumnDefault = (event) => {
@@ -59,37 +38,80 @@ function ColumnProperties({ tableId, column, projectDispatch }) {
     projectDispatch({ type: 'RemoveColumn', tableId, columnId: column.id });
   };
 
+  const handleShiftColumnBack = () => {
+    projectDispatch({
+      type: 'MoveColumn', tableId, columnId: column.id, shift: -1,
+    });
+  };
+  const handleShiftColumnFront = () => {
+    projectDispatch({
+      type: 'MoveColumn', tableId, columnId: column.id, shift: 1,
+    });
+  };
+
+  const updateColumnDefault = (event) => {
+    projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, default: event.target.value } });
+  };
+  const updateColumnCheck = (event) => {
+    projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, check: event.target.value } });
+  };
+  const updateColumnComment = (event) => {
+    projectDispatch({ type: 'UpdateColumn', tableId, column: { ...column, comment: event.target.value } });
+  };
+
   return (
     <Container className="column-properties">
       <div className="controls">
-        <button onClick={toggleColumnPk} type="button" className={`material-icons ${column.pk ? 'key' : ''}`}>
+        <button
+          onClick={handleTogglePk}
+          type="button"
+          className={`material-icons ${column.pk ? 'key' : ''}`}
+        >
           {column.pk ? 'key' : 'key_off'}
         </button>
         <button
-          onClick={toggleColumnNotNull}
+          onClick={handleToggleNotNull}
           type="button"
           className={`material-icons ${column.pk || column.notNull ? 'notnull' : ''}`}
         >
           {column.pk || column.notNull ? 'block' : 'radio_button_unchecked'}
         </button>
         <button
-          onClick={toggleColumnIndexed}
+          onClick={handleToggleIndexed}
           type="button"
           className={`material-icons ${column.pk || column.indexed ? 'indexed' : ''}`}
         >
           format_list_numbered
         </button>
         <button
-          onClick={toggleColumnUnique}
+          onClick={handleToggleUnique}
           type="button"
           className={`material-icons ${column.pk || column.unique ? 'unique' : ''}`}
         >
           diamond
         </button>
         <span />
-        <button type="button" className="material-icons arrow">arrow_upward</button>
-        <button type="button" className="material-icons arrow">arrow_downward</button>
-        <button type="button" className="material-icons delete" onClick={handleDeleteColumn}>clear</button>
+        <button
+          type="button"
+          className="material-icons arrow"
+          onClick={handleShiftColumnBack}
+        >
+          arrow_upward
+        </button>
+        <button
+          type="button"
+          className="material-icons arrow"
+          onClick={handleShiftColumnFront}
+        >
+          arrow_downward
+        </button>
+        <button
+          type="button"
+          className="material-icons delete"
+          onClick={handleDeleteColumn}
+        >
+          clear
+        </button>
       </div>
       <div className="properties">
         <div>

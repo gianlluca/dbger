@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Table from '../Table';
 import { Container } from './styles';
 
-function Viewport({ props }) {
+function Viewport({ viewportRef, deleteAreaRef, props }) {
   const [viewOffset, setViewOffset] = useState(props.project.viewOffset);
   const [dragging, setDragging] = useState(false);
 
@@ -60,6 +60,21 @@ function Viewport({ props }) {
     }
   };
 
+  const handleAddTable = (event) => {
+    props.projectDispatch({ type: 'AddTable' });
+    event.target.blur();
+  };
+
+  const handleToggleControls = (event) => {
+    props.projectDispatch({ type: 'ToggleControls' });
+    event.target.blur();
+  };
+
+  const handleToggleSqlOutput = (event) => {
+    props.projectDispatch({ type: 'ToggleSqlOutput' });
+    event.target.blur();
+  };
+
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('mousedown', handleMouseDown);
@@ -77,7 +92,7 @@ function Viewport({ props }) {
   }, [dragging]);
 
   return (
-    <Container id="viewport">
+    <Container ref={viewportRef}>
       {
         props.project.tables.map(
           (table) => (
@@ -87,6 +102,7 @@ function Viewport({ props }) {
               table={table}
               viewOffset={viewOffset}
               projectDispatch={props.projectDispatch}
+              deleteAreaRef={deleteAreaRef}
             />
           ),
         )
@@ -95,41 +111,31 @@ function Viewport({ props }) {
         <button
           type="button"
           className="material-icons"
-          onClick={
-            (event) => {
-              props.projectDispatch({ type: 'AddTable' });
-              event.target.blur();
-            }
-          }
+          onClick={handleAddTable}
         >
           add
         </button>
         <button
           type="button"
           className="material-icons visibility"
-          onClick={
-            (event) => {
-              props.projectDispatch({ type: 'ToggleControls' });
-              event.target.blur();
-            }
-          }
+          onClick={handleToggleControls}
         >
           {props.project.controls ? 'visibility' : 'visibility_off'}
         </button>
-        <span id="delete-area" type="button" className="material-icons">delete_outline</span>
+        <span
+          type="button"
+          className="material-icons delete-area"
+          ref={deleteAreaRef}
+        >
+          delete_outline
+        </span>
       </div>
       <button
         type="button"
         className="material-icons"
-        onClick={
-          (event) => {
-            props.projectDispatch({ type: 'UpdateTemplateConfig', templateConf: { ...props.project.templateConf, visible: !props.project.templateConf.visible } });
-            event.target.blur();
-            console.log('ok');
-          }
-        }
+        onClick={handleToggleSqlOutput}
       >
-        {props.project.templateConf.visible ? 'arrow_drop_down' : 'arrow_drop_up'}
+        {props.project.sqlOutputConf.visible ? 'arrow_drop_down' : 'arrow_drop_up'}
       </button>
     </Container>
   );

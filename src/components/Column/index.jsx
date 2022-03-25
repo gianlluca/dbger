@@ -1,34 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ColumnProperties from '../ColumnProperties';
 import { Container } from './styles';
 
 function Column({ tableId, column, projectDispatch }) {
-  const [focused, setFocused] = useState(false);
-
-  const updateColumnName = (newName) => {
+  const handleChangeName = (event) => {
     projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, name: newName },
+      type: 'UpdateColumn', tableId, column: { ...column, name: event.target.textContent },
     });
   };
-  const updateColumnType = (newType) => {
+  const handleChangeType = (event) => {
     projectDispatch({
-      type: 'UpdateColumn', tableId, column: { ...column, type: newType },
+      type: 'UpdateColumn', tableId, column: { ...column, type: event.target.textContent },
     });
   };
 
   return (
-    <Container
-      pk={column.pk.toString()}
-      focused={focused}
-      onFocus={() => { setFocused(true); }}
-      onBlur={() => { setFocused(false); }}
-    >
+    <Container pk={column.pk.toString()}>
       <td
         className="name"
         suppressContentEditableWarning
         contentEditable="true"
         spellCheck="false"
-        onBlur={(event) => { updateColumnName(event.target.textContent); }}
+        onBlur={handleChangeName}
       >
         {column.name}
       </td>
@@ -37,7 +30,7 @@ function Column({ tableId, column, projectDispatch }) {
         suppressContentEditableWarning
         contentEditable="true"
         spellCheck="false"
-        onBlur={(event) => { updateColumnType(event.target.textContent); }}
+        onBlur={handleChangeType}
       >
         {column.type}
       </td>

@@ -2,6 +2,9 @@ import { ProjectControl } from '../ProjectControl';
 import { Container } from './styles';
 
 export function Header({ props }) {
+  const handleChangeName = (event) => {
+    props.projectDispatch({ type: 'UpdateProjectName', name: event.target.textContent });
+  };
   return (
     <Container>
       <div>
@@ -18,9 +21,7 @@ export function Header({ props }) {
           suppressContentEditableWarning
           contentEditable="true"
           spellCheck="false"
-          onBlur={(event) => {
-            props.projectDispatch({ type: 'UpdateProjectName', name: event.target.innerHTML });
-          }}
+          onBlur={handleChangeName}
           className="project-name"
         >
           {props.projectName}

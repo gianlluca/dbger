@@ -18,11 +18,12 @@ export const Container = styled.div`
   background-color: #383838;
   font-size: 0.75rem;
   border-radius: 0 0.5rem 0.5rem 0.5rem;
-  box-shadow: 1px 1px 2px 3px #00000022;
+  box-shadow: 1px 1px 3px 1px #00000044;
 
   overflow: hidden;
+  cursor: default;
 
-  transition: all 0.0s;
+  transition: all 0s;
   
   .controls{
     display: flex;
@@ -44,7 +45,6 @@ export const Container = styled.div`
       color: #4A4A4A;
       text-align: center;
       letter-spacing: -1px;
-
 
       transition: all 0.2s;
 

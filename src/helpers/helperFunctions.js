@@ -1,21 +1,27 @@
-export function isOnDeleteArea(event, deleteAreaId) {
-  const delRect = document.getElementById(deleteAreaId).getBoundingClientRect();
-  const delArea = {
-    x: delRect.left + (delRect.width / 2.0),
-    y: delRect.top + (delRect.height / 2.0),
-  };
-  const distance = Math.hypot(event.clientX - delArea.x, event.clientY - delArea.y);
+export function isOnDeleteArea(event, deleteAreaRef) {
+  if (deleteAreaRef.current) {
+    const delRect = deleteAreaRef.current.getBoundingClientRect();
+    const delArea = {
+      x: delRect.left + (delRect.width / 2.0),
+      y: delRect.top + (delRect.height / 2.0),
+    };
+    const distance = Math.hypot(event.clientX - delArea.x, event.clientY - delArea.y);
 
-  return distance < (delRect.width / 2.0);
+    return distance < (delRect.width / 2.0);
+  }
+  return false;
 }
 
-export function getAddTablePosition(viewOffset) {
-  const viewRect = document.getElementById('viewport').getBoundingClientRect();
+export function getAddTablePosition(viewportRef, viewOffset) {
+  if (viewportRef.current) {
+    const viewRect = viewportRef.current.getBoundingClientRect();
 
-  return {
-    x: (viewRect.width / 2.0 - 70) + viewOffset.x,
-    y: (viewRect.height / 2.0 - 43) + viewOffset.y,
-  };
+    return {
+      x: (viewRect.width / 2.0 - 70) + viewOffset.x,
+      y: (viewRect.height / 2.0 - 43) + viewOffset.y,
+    };
+  }
+  return { x: 0, y: 0 };
 }
 
 export function getMigrateUpSqlOutput(tables) {
@@ -82,6 +88,7 @@ export function getMigrateUpSqlOutput(tables) {
   }
   appendLine('\n');
 
+  let hasAtLeastOneRelation = false;
   // Relations
   for (let i = 0; i < tables.length; i += 1) {
     const { columns } = tables[i];
@@ -90,16 +97,17 @@ export function getMigrateUpSqlOutput(tables) {
       if (columns[j].relation) {
         hasRelation = true;
         const relSplit = columns[j].relation.name.split('.');
-        if (relSplit.length < 2) {
-          break;
-        }
+        if (relSplit.length < 2) { break; }
         // eslint-disable-next-line max-len
         appendLine(`ALTER TABLE "${tables[i].name.toLowerCase()}" ADD FOREIGN KEY ("${columns[j].name.toLowerCase()}") REFERENCES "${relSplit[0].toLowerCase()}" ("${relSplit[1].toLowerCase()}");`);
       }
     }
-    if (hasRelation) { appendLine('\n'); }
+    if (hasRelation) {
+      appendLine('\n');
+      hasAtLeastOneRelation = true;
+    }
   }
-  appendLine('\n');
+  if (hasAtLeastOneRelation) { appendLine('\n'); }
 
   // Indexes
   for (let i = 0; i < tables.length; i += 1) {
@@ -109,7 +117,7 @@ export function getMigrateUpSqlOutput(tables) {
       if (!columns[j].pk && columns[j].indexed) {
         hasIndexed = true;
         // eslint-disable-next-line max-len
-        appendLine(`CREATE INDEX IF NOT EXISTS ON "${columns[j].name.toLowerCase()}" ("${tables[i].name.toLowerCase()}");`);
+        appendLine(`CREATE INDEX IF NOT EXISTS "idx_${columns[j].name.toLowerCase()}" ON "${tables[i].name.toLowerCase()}"("${columns[j].name.toLowerCase()}");`);
       }
     }
     if (hasIndexed) { appendLine('\n'); }
@@ -129,11 +137,31 @@ export function getMigrateDownSqlOutput(tables) {
   appendLine('\n');
 
   for (let i = 0; i < tables.length; i += 1) {
-    appendLine(`DROP TABLE IF EXISTS ${tables[i].name.toLowerCase()};`);
+    appendLine(`DROP TABLE IF EXISTS ${tables[i].name.toLowerCase()} CASCADE;`);
   }
   appendLine('\n');
 
   return outputLines;
+}
+
+export function shiftColumn(columns, columnId, shift) {
+  let indexOf = 0;
+
+  for (let i = 0; i < columns.length; i += 1) {
+    if (columns[i].id === columnId) {
+      indexOf = i;
+      break;
+    }
+  }
+
+  // Don't allow cyclic shift
+  if ((indexOf + shift) >= columns.length || (indexOf + shift) < 0) {
+    return columns;
+  }
+
+  const columnCutOut = columns.splice(indexOf, 1)[0];
+  columns.splice(indexOf + shift, 0, columnCutOut);
+  return columns;
 }
 
 export function clamp(value, min, max) {
