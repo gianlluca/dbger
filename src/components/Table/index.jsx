@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from './styles';
 import Column from '../Column';
-import ColumnControl from '../ColumnControl';
 import { isOnDeleteArea } from '../../helpers/helperFunctions';
 import { Relation } from '../Relation';
 
@@ -10,6 +9,14 @@ function Table({
 }) {
   const [pos, setPos] = useState(table.pos);
   const [dragging, setDragging] = useState(false);
+
+  const updateTableName = (newName) => {
+    projectDispatch({ type: 'UpdateTable', table: { ...table, name: newName } });
+  };
+
+  const updateTablePos = () => {
+    projectDispatch({ type: 'UpdateTable', table: { ...table, pos } });
+  };
 
   const handleMouseUp = (event) => {
     if (event.button === 0) {
@@ -25,14 +32,12 @@ function Table({
   };
 
   const handleMouseMove = (event) => {
-    setPos(
-      (previousPos) => (
-        {
-          x: Math.round(previousPos.x + event.movementX),
-          y: Math.round(previousPos.y + event.movementY),
-        }
-      ),
-    );
+    setPos((previousPos) => (
+      {
+        x: Math.round(previousPos.x + event.movementX),
+        y: Math.round(previousPos.y + event.movementY),
+      }
+    ));
   };
 
   const handleMouseDown = (event) => {
@@ -44,14 +49,12 @@ function Table({
   };
 
   useEffect(() => {
-    if (!dragging) {
-      projectDispatch({ type: 'UpdateTablePos', id: table.id, pos });
-    }
+    if (!dragging) { updateTablePos(); }
   }, [dragging]);
 
   return (
     <Container style={{ transform: `translate(${pos.x - viewOffset.x}px,${pos.y - viewOffset.y}px)` }}>
-      <div className="left">
+      <div className="container-left">
         {
           table.columns.map(
             (column) => (
@@ -69,33 +72,37 @@ function Table({
           )
         }
       </div>
-      <div className="center">
+      <div className="container-center">
         <div className="header" onPointerDown={handleMouseDown}>
           <p
             suppressContentEditableWarning
             contentEditable="true"
             spellCheck="false"
-            onBlur={
-              (event) => {
-                projectDispatch(
-                  { type: 'UpdateTableName', id: table.id, name: event.target.innerHTML },
-                );
-              }
-            }
+            onBlur={(event) => { updateTableName(event.target.innerHTML); }}
           >
             {table.name}
           </p>
         </div>
         <div className="columns">
           {
-            table.columns.map((column) => (
-              <Column
-                key={column.id}
-                tableId={table.id}
-                column={column}
-                projectDispatch={projectDispatch}
-              />
-            ))
+            table.columns ? (
+              <table>
+                <tbody>
+                  {
+                    table.columns.map(
+                      (column) => (
+                        <Column
+                          key={column.id}
+                          tableId={table.id}
+                          column={column}
+                          projectDispatch={projectDispatch}
+                        />
+                      ),
+                    )
+                  }
+                </tbody>
+              </table>
+            ) : (null)
           }
         </div>
         {
@@ -112,21 +119,6 @@ function Table({
             >
               add_circle
             </button>
-          ) : (null)
-        }
-      </div>
-      <div className="right">
-        {
-          controls ? table.columns.map(
-            (column) => (
-              <ColumnControl
-                key={column.id}
-                tableId={table.id}
-                columnId={column.id}
-                columnPk={column.pk}
-                projectDispatch={projectDispatch}
-              />
-            ),
           ) : (null)
         }
       </div>

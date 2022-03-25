@@ -8,7 +8,7 @@ import {
 import Viewport from './components/Viewport';
 import { Header } from './components/Header';
 import { GlobalStyle } from './GlobalStyle';
-import { TemplateOutput } from './components/TemplateOutput';
+import { SqlOutput } from './components/SqlOutput';
 
 function App() {
   const [projectList, setProjectList] = useState(loadProjectList());
@@ -33,23 +33,12 @@ function App() {
             },
           ],
         };
-      case 'UpdateTableName':
+      case 'UpdateTable':
         return {
           ...state,
           tables: [
             ...state.tables.map(
-              (table) => (table.id !== action.id ? table
-                : { ...table, name: action.name }),
-            ),
-          ],
-        };
-      case 'UpdateTablePos':
-        return {
-          ...state,
-          tables: [
-            ...state.tables.map(
-              (table) => (table.id !== action.id ? table
-                : { ...table, pos: action.pos }),
+              (table) => (table.id !== action.table.id ? table : action.table),
             ),
           ],
         };
@@ -69,13 +58,13 @@ function App() {
                 : {
                   ...table,
                   columns: [...table.columns, {
-                    id: uuidv4(), name: 'name', type: 'varchar', pk: false,
+                    id: uuidv4(), name: 'name', type: 'varchar', pk: false, notNull: true,
                   }],
                 }),
             ),
           ],
         };
-      case 'ToggleColumnPk':
+      case 'UpdateColumn':
         return {
           ...state,
           tables: [
@@ -85,46 +74,7 @@ function App() {
                   ...table,
                   columns: [
                     ...table.columns.map(
-                      (column) => ((column.id !== action.columnId)
-                        ? column : { ...column, pk: !column.pk }),
-                    ),
-                  ],
-                }
-              ),
-            ),
-          ],
-        };
-      case 'UpdateColumnName':
-        return {
-          ...state,
-          tables: [
-            ...state.tables.map(
-              (table) => (table.id !== action.tableId ? table
-                : {
-                  ...table,
-                  columns: [
-                    ...table.columns.map(
-                      (column) => (column.id !== action.columnId ? column
-                        : { ...column, name: action.columnName }),
-                    ),
-                  ],
-                }
-              ),
-            ),
-          ],
-        };
-      case 'UpdateColumnType':
-        return {
-          ...state,
-          tables: [
-            ...state.tables.map(
-              (table) => (table.id !== action.tableId ? table
-                : {
-                  ...table,
-                  columns: [
-                    ...table.columns.map(
-                      (column) => (column.id !== action.columnId ? column
-                        : { ...column, type: action.columnType }),
+                      (column) => (column.id !== action.column.id ? column : action.column),
                     ),
                   ],
                 }
@@ -293,7 +243,11 @@ function App() {
         }}
       />
       <Viewport props={{ project, projectDispatch }} />
-      <TemplateOutput props={{ project, projectDispatch }} />
+      {
+        project.templateConf.visible ? (
+          <SqlOutput props={{ project, projectDispatch }} />
+        ) : (null)
+      }
       <GlobalStyle />
     </>
   );

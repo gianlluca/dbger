@@ -30,6 +30,7 @@
         "react/react-in-jsx-scope": "off",
         "react/prop-types": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "no-nested-ternary": "off"
+        "no-nested-ternary": "off",
+        "max-len": ["error", { "code": 120 }]
     }
 }

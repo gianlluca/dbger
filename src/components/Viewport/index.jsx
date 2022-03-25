@@ -118,6 +118,19 @@ function Viewport({ props }) {
         </button>
         <span id="delete-area" type="button" className="material-icons">delete_outline</span>
       </div>
+      <button
+        type="button"
+        className="material-icons"
+        onClick={
+          (event) => {
+            props.projectDispatch({ type: 'UpdateTemplateConfig', templateConf: { ...props.project.templateConf, visible: !props.project.templateConf.visible } });
+            event.target.blur();
+            console.log('ok');
+          }
+        }
+      >
+        {props.project.templateConf.visible ? 'arrow_drop_down' : 'arrow_drop_up'}
+      </button>
     </Container>
   );
 }

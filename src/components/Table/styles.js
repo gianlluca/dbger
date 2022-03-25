@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: absolute;
 
-  .left {
+  .container-left {
     position: absolute;
     top: 2rem;
     right: 100%;
@@ -12,7 +12,7 @@ export const Container = styled.div`
     align-items: flex-end;
   }
 
-  .center {
+  .container-center {
     display: flex;
     flex-flow: column nowrap;
     background: linear-gradient(
@@ -29,7 +29,6 @@ export const Container = styled.div`
       align-items: center;
       justify-content: center;
       padding: 0 2rem;
-      line-height: 2rem;
       color: #c8c8c8;
       font-weight: 700;
       text-shadow: 1px 1px 3px #00000045;
@@ -37,6 +36,14 @@ export const Container = styled.div`
 
       p {
         cursor: text;
+        line-height: 2rem;
+      }
+    }
+
+    .columns{
+      table{
+        border-spacing: 0;
+        width: 100%;
       }
     }
 
@@ -59,7 +66,7 @@ export const Container = styled.div`
     }
   }
 
-  .right {
+  .container-right {
     position: absolute;
     top: 2rem;
     left: 100%;

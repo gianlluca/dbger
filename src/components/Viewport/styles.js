@@ -44,4 +44,27 @@ export const Container = styled.div`
       }
     }
   }
+
+
+  &>button{
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0;
+    height: fit-content;
+    width: fit-content;
+    border: 0;
+    background: #00000044;
+    border-radius: 0.125rem;
+    color: #444;
+    padding: 0 0.5rem;
+    font-size: 1.5rem;
+    line-height: 1rem;
+
+    transition: all 0.2s;
+
+    &:hover{
+      background: #00000088;
+      color: #888;
+    }
+  }
 `;
