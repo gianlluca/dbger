@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { clamp, getMigrateUpSqlOutput, getMigrateDownSqlOutput } from '../../helpers/helperFunctions';
+import { clamp } from '../../helpers/helperFunctions';
+import { getMigrateDownOutput, getMigrateUpOutput } from '../../helpers/migrate';
 import { Container } from './styles';
 
-export function SqlOutput({ props }) {
+export function MigrateOutput({ props }) {
   const { project, projectDispatch } = props;
 
-  const [height, setHeight] = useState(project.sqlOutputConf.height);
+  const [height, setHeight] = useState(project.migOutput.height);
+  const [templateType, setTemplateType] = useState(project.migOutput.templateType);
   const [migrateType, setMigrateType] = useState(0);
 
   const handleMouseUp = (event) => {
@@ -35,15 +37,36 @@ export function SqlOutput({ props }) {
   };
 
   useEffect(() => {
-    projectDispatch({ type: 'UpdateTemplateConfig', sqlOutputConf: { ...project.sqlOutputConf, height } });
+    projectDispatch(
+      {
+        type: 'UpdateTemplateConfig',
+        migOutput: { ...project.migOutput, height },
+      },
+    );
   }, [height]);
+
+  useEffect(() => {
+    projectDispatch(
+      {
+        type: 'UpdateTemplateConfig',
+        migOutput: { ...project.migOutput, templateType },
+      },
+    );
+  }, [templateType]);
 
   return (
     <Container>
       <div className="resize-area" onPointerDown={handleMouseDown} />
       <div className="content" style={{ minHeight: `${height}px`, height: `${height}px` }}>
         <div className="config">
-          <span>PostgreSQL</span>
+          <select
+            defaultValue={templateType}
+            onChange={(event) => { setTemplateType(Number(event.target.value)); }}
+          >
+            <option value={0}>PostgreSQL</option>
+            <option value={1}>Prisma</option>
+            <option value={2}>GoRm</option>
+          </select>
           <span>-</span>
           <button type="button" onClick={() => { setMigrateType(0); }}>Migrate Up</button>
           <button type="button" onClick={() => { setMigrateType(1); }}>Migrate Down</button>
@@ -53,16 +76,7 @@ export function SqlOutput({ props }) {
             <tbody>
               {
                 (!migrateType) ? (
-                  getMigrateUpSqlOutput(project.tables).map(
-                    (line) => (
-                      <tr key={line.id}>
-                        <td className="line">{line.id}</td>
-                        <td className="text">{line.line}</td>
-                      </tr>
-                    ),
-                  )
-                ) : (
-                  getMigrateDownSqlOutput(project.tables).map(
+                  getMigrateUpOutput(project.tables, templateType).map(
                     (line) => (
                       <tr key={line.id}>
                         <td className="line">{line.id}</td>
@@ -71,6 +85,16 @@ export function SqlOutput({ props }) {
                     ),
                   )
                 )
+                  : (
+                    getMigrateDownOutput(project.tables, templateType).map(
+                      (line) => (
+                        <tr key={line.id}>
+                          <td className="line">{line.id}</td>
+                          <td className="text">{line.line}</td>
+                        </tr>
+                      ),
+                    )
+                  )
               }
             </tbody>
           </table>

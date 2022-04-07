@@ -46,10 +46,32 @@ export const Container = styled.div`
             color: #aaa;
 
             transition: all 0.2s;
+            
             &:hover{
                 filter: brightness(1.5);
             }
         }
+
+        select{
+          padding: 0.125rem 0.4375rem;
+          background: none;
+          border: none;
+          border-radius: 0.25rem;
+          font-size: 0.75rem;
+          color: #888;
+
+          transition: all 0.2s;
+
+          &:hover{
+            filter: brightness(1.5);
+          }
+
+          &:active{
+            background-color: #484848;
+            color: #ccc;
+          }
+        }
+
     }
 
     .output{

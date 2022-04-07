@@ -135,7 +135,7 @@ function Viewport({ viewportRef, deleteAreaRef, props }) {
         className="material-icons"
         onClick={handleToggleSqlOutput}
       >
-        {props.project.sqlOutputConf.visible ? 'arrow_drop_down' : 'arrow_drop_up'}
+        {props.project.migOutput.visible ? 'arrow_drop_down' : 'arrow_drop_up'}
       </button>
     </Container>
   );

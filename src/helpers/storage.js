@@ -22,7 +22,7 @@ export function newProjectObject() {
     ],
     controls: true,
     viewOffset: { x: 0, y: 0 },
-    sqlOutputConf: { height: 40, visible: false },
+    migOutput: { height: 40, visible: false, templateType: 0 },
   };
 }
 
@@ -36,8 +36,8 @@ export function loadProjectData(projectId) {
 
   // To avoid error loading projects that was saved before
   // the template conf functionality
-  if (!project.sqlOutputConf) {
-    return { ...project, sqlOutputConf: { height: 44, visible: true } };
+  if (!project.migOutput) {
+    return { ...project, migOutput: { height: 44, visible: true } };
   }
 
   return project;

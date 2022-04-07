@@ -10,7 +10,7 @@ import {
 import Viewport from './components/Viewport';
 import { Header } from './components/Header';
 import { GlobalStyle } from './GlobalStyle';
-import { SqlOutput } from './components/SqlOutput';
+import { MigrateOutput } from './components/MigrateOutput';
 
 function App() {
   const viewportRef = useRef(null);
@@ -184,12 +184,12 @@ function App() {
       case 'ToggleSqlOutput':
         return {
           ...state,
-          sqlOutputConf: { ...state.sqlOutputConf, visible: !state.sqlOutputConf.visible },
+          migOutput: { ...state.migOutput, visible: !state.migOutput.visible },
         };
       case 'UpdateTemplateConfig':
         return {
           ...state,
-          sqlOutputConf: action.sqlOutputConf,
+          migOutput: action.migOutput,
         };
       default:
         throw new Error('Action type unrecognizable');
@@ -236,7 +236,9 @@ function App() {
     }
   }, [project]);
 
-  useEffect(() => { saveProjectList(projectList); }, [projectList]);
+  useEffect(() => {
+    saveProjectList(projectList);
+  }, [projectList]);
 
   return (
     <>
@@ -250,9 +252,13 @@ function App() {
           deleteProject,
         }}
       />
-      <Viewport viewportRef={viewportRef} deleteAreaRef={deleteAreaRef} props={{ project, projectDispatch }} />
+      <Viewport
+        viewportRef={viewportRef}
+        deleteAreaRef={deleteAreaRef}
+        props={{ project, projectDispatch }}
+      />
       {
-        project.sqlOutputConf.visible ? (<SqlOutput props={{ project, projectDispatch }} />) : (null)
+        project.migOutput.visible && <MigrateOutput props={{ project, projectDispatch }} />
       }
       <GlobalStyle />
     </>
